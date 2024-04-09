@@ -33,7 +33,38 @@ function init () {
 
 // Function to create bar chart
 function createBar(bar) {
+
     d3.json(url).then((data) => {
+
+        // Retrieve data
+        let sampleInfo = data.samples;
+        let value = sampleInfo.filter(result => result.id == bar);
+        let valueData = value[0];
+
+        // Set labels for otu_ids, otu_labels, and sample_values
+        let otu_ids = valueData.otu_ids;
+        let otu_labels = valueData.otu_labels;
+        let sample_values = valueData.sample_values;
+
+        // Log items in console
+        console.log(otu_ids,otu_labels,sample_values);
+
+        // Set items for descending order
+        let xticks = otu_ids.slice(0,10).map(id => `OTU ${id}`).reverse();
+        let yticks = sample_values.slice(0,10).reverse();
+        let labels = otu_labels.slice(0,10).reverse();
+
+        // Set up bar chart
+        let trace = {
+            x: xticks,
+            y: yticks,
+            text: labels,
+            type: "bar",
+            orientation: "n"
+        };
+
+        // Plot chart
+        Plotly.newPlot("bar", [trace])
 
     });
 };
